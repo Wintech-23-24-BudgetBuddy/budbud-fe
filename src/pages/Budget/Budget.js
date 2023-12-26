@@ -4,7 +4,7 @@ import React from 'react'
 export default function Budget() {
   return (
     <div>
-      
+      This is the budget page, its not done yet 🥲
     </div>
   )
 }
