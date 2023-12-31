@@ -1,6 +1,6 @@
 import './Signup.css'
-import { useState } from 'react'
-import { useSignup } from '../hooks/useSignup'
+import { React, useState } from 'react'
+import { useSignup } from '../../hooks/useSignup'
 
 export default function Signup() {
   const [email, setEmail] = useState('')
