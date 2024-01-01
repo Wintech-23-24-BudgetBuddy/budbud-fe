@@ -1,63 +1,67 @@
 import React from 'react';
-import './App.css';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { useAuthContext } from './hooks/useAuthContext';
 import Box from '@mui/material/Box';
+import CssBaseline from '@mui/material/CssBaseline';
+import Toolbar from '@mui/material/Toolbar';
+import './App.css';
 
-import Home from './pages/Home/Home'
-import Budget from './pages/Budget/Budget'
-import Chatbot from './pages/Chatbot/Chatbot'
-import Login from "./pages/Login/Login"
-import Signup from './pages/Signup/Signup'
+import { useAuthContext } from './hooks/useAuthContext';
+
+import Budget from './pages/Budget/Budget';
+import Chatbot from './pages/Chatbot/Chatbot';
+import Login from './pages/Login/Login';
+import Signup from './pages/Signup/Signup';
+import Transactions from './pages/Transactions/Transactions';
+
+import Dashboard from './pages/Dashboard/Dashboard';
 import Navbar from './components/Navbar';
 import Menu from './components/Menu';
-import Container from '@mui/material/Container';
 
 function App() {
-  const {user, authIsReady} = useAuthContext();
+  const { user, authIsReady } = useAuthContext();
+
+  const renderProtectedRoute = (path, component) => {
+    return user ? component : <Navigate to="/login" />;
+  };
+
+  const renderLoginOrSignup = (path, component) => {
+    return user ? <Navigate to="/" /> : component;
+  };
+
+  const renderRoutes = () => {
+    return (
+      <Routes>
+        <Route path="/" element={renderProtectedRoute('/', <Dashboard />)} />
+        <Route path="/budget" element={renderProtectedRoute('/budget', <Budget />)} />
+        <Route path="/chatbot" element={renderProtectedRoute('/chatbot', <Chatbot />)} />
+        <Route path="/login" element={renderLoginOrSignup('/login', <Login />)} />
+        <Route path="/signup" element={renderLoginOrSignup('/signup', <Signup />)} />
+        <Route path="/transactions" element={renderProtectedRoute('/transactions', <Transactions />)} />
+      </Routes>
+    );
+  };
 
   return (
-    <Container sx={{display: "flex", height: "100vh"}}>
+    <BrowserRouter>
       {authIsReady && (
-      <BrowserRouter>
-      <Navbar />
-      <Container sx={{display: "flex", flexDirection: "column", justifyContent: "space-between"}}>
-      <Menu/>
- 
-      <Box component="section" sx={{  flexGrow: 1, border: '1px dashed grey' }}>
-        <Routes>
-          <Route
-            path='/'
-            element = {user ? <Home /> : <Navigate to='/login' />}
-          />
-
-          <Route
-            path='/budget'
-            element={user ? <Budget/> : <Navigate to='/login' />}
-          />
-
-          <Route
-            path='/chatbot'
-            element={user ? <Chatbot/> : <Navigate to='/login' />}
-          />
-
-          <Route
-            path='/login'
-            element={user ? <Navigate to='/' /> : <Login/>}
-          />
-
-          <Route
-            path='/signup'
-            element={user ? <Navigate to='/' /> : <Signup/>}
-          />        
-
-        </Routes>
-      </Box>
-      </Container>
-
-      </BrowserRouter>
+        <Box sx={{ display: 'flex' }}>
+          <CssBaseline />
+    
+            <>
+              <Navbar />
+              <Menu />
+            </>
+         
+          <Box
+            component="main"
+            sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}
+          >
+            <Toolbar />
+            {authIsReady ? renderRoutes() : <p>Loading...</p>}
+          </Box>
+        </Box>
       )}
-    </Container>
+    </BrowserRouter>
   );
 }
 
