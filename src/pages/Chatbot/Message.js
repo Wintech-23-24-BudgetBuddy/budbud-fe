@@ -2,9 +2,6 @@ import React from "react";
 import { Box, Paper, Typography } from "@mui/material";
 import PropTypes from 'prop-types';
 
-
-
-
 export const Message = ({ message }) => {
     const isBot = message.sender === "bot";
   
