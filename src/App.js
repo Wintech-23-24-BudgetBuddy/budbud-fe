@@ -46,12 +46,12 @@ function App() {
       {authIsReady && (
         <Box sx={{ display: 'flex' }}>
           <CssBaseline />
-    
+          {user && (
             <>
               <Navbar />
               <Menu />
             </>
-         
+          )}
           <Box
             component="main"
             sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}
