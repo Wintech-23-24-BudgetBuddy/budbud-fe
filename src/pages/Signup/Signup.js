@@ -1,53 +1,114 @@
 import './Signup.css'
-import { React, useState } from 'react'
+import { React } from 'react'
 import { useSignup } from '../../hooks/useSignup'
+import { Link } from 'react-router-dom'
+import {
+  Avatar,
+  Button,
+  CssBaseline,
+  TextField,
+  Grid,
+  Box,
+  Typography,
+  Container,
+} from '@mui/material'
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
+
 
 export default function Signup() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [name, setName] = useState('')
-  const { signup, error } = useSignup()
+  const { signup, error} = useSignup()
 
-  const handleSumbit = (e) => {
-    e.preventDefault()
-    signup(email, password, name)
-    setEmail('')
-    setPassword('')
-    setName('')
-  }
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    signup({ // we need to add more fields here 
+      email: data.get('email'),
+      password: data.get('password'),
+      firstName: data.get('firstName'),
+      lastName: data.get('lastName'),
+    });
+  };
 
   return (
-    <form onSubmit={handleSumbit} className='signup-form'>
-      <h2>Sign Up</h2>
-      <label>
-        <span>Email:</span>
-        <input
-          type='text'
-          onChange={(e) => setEmail(e.target.value)}
-          value={email}
-          required
-        />
-      </label>
-      <label>
-        <span>Password:</span>
-        <input
-          type='password'
-          onChange={(e) => setPassword(e.target.value)}
-          value={password}
-          required
-        />
-      </label>
-      <label>
-        <span>Username:</span>
-        <input
-          type='text'
-          onChange={(e) => setName(e.target.value)}
-          value={name}
-          required
-        />
-      </label>
-      <button className='btn'>Sign Up</button>
-      {error && <p>{error}</p>}
-    </form>
+    <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Sign up
+          </Typography>
+          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  autoComplete="given-name"
+                  name="firstName"
+                  required
+                  fullWidth
+                  id="firstName"
+                  label="First Name"
+                  autoFocus
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  fullWidth
+                  id="lastName"
+                  label="Last Name"
+                  name="lastName"
+                  autoComplete="family-name"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email Address"
+                  name="email"
+                  autoComplete="email"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  type="password"
+                  id="password"
+                  autoComplete="new-password"
+                />
+              </Grid>
+            </Grid>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ bgcolor: 'secondary.main', mt: 3, mb: 2 }}
+            >
+              Sign Up
+            </Button>
+            <Grid container justifyContent="center">
+              <Grid item>
+                <Link to="/login" variant="body2">
+                  Already have an account? Sign in
+                </Link>
+              </Grid>
+            </Grid>
+          </Box>
+        </Box>
+        {error && <p>{error}</p>}
+      </Container>
   )
 }

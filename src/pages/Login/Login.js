@@ -1,47 +1,78 @@
 import React from 'react'
-import { useState } from 'react'
 import { useLogin } from '../../hooks/useLogin'
+import { Link } from 'react-router-dom'
+import { Avatar, Button, CssBaseline, TextField, Grid, Box, Typography, Container } from '@mui/material'
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 
 export default function Login() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const {login, error, isPending} = useLogin()
+  const {login } = useLogin()
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    login(email, password)
-  }
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    login(data.get('email'), data.get('password'));
+  };
 
   return (
-    <form onSubmit={handleSubmit} className='login-form'>
-      <h2>
-        Login
-      </h2>
-      <label>
-        <span>
-          Email: 
-        </span>
-        <input
-          type='text'
-          placeholder='Enter your email here'
-          onChange={(e) => setEmail(e.target.value)}
-          value={email}
+    <Container component="main" maxWidth="xs">
+    <CssBaseline />
+    <Box
+      sx={{
+        marginTop: 8,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+      }}
+    >
+      <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+        <LockOutlinedIcon />
+      </Avatar>
+      <Typography component="h1" variant="h5">
+        Sign in
+      </Typography>
+      <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+        <TextField
+          margin="normal"
+          required
+          fullWidth
+          id="email"
+          label="Email Address"
+          name="email"
+          autoComplete="email"
+          autoFocus
         />
-      </label>
-      <label>
-        <span>
-          Password: 
-        </span>
-        <input
-          type='text'
-          placeholder='enter your password here'
-          onChange={(e) => setPassword(e.target.value)}
-          value={password}
+        <TextField
+          margin="normal"
+          required
+          fullWidth
+          name="password"
+          label="Password"
+          type="password"
+          id="password"
+          autoComplete="current-password"
         />
-      </label>
-      {!isPending && <button className='button'>Login</button>}
-      {isPending && <button className='button' disabled>Loading...</button>}
-      {error && <p>{error}</p>}
-    </form>
+        {/* <FormControlLabel
+          control={<Checkbox value="remember" color="primary" />}
+          label="Remember me"
+        /> */}
+        <Button
+          type="submit"
+          fullWidth
+          variant="contained"
+          sx={{ bgcolor: 'secondary.main',mt: 3, mb: 2 }}
+        >
+          Sign In
+        </Button>
+        <Grid container sx={{justifyContent:"center"}}>
+          <Grid item>
+            <Link to="/signup" variant="body2">
+              {"Don't have an account? Sign Up"}
+            </Link>
+          </Grid>
+        </Grid>
+      </Box>
+    </Box>
+
+  </Container>
   )
 }

@@ -1,56 +1,26 @@
 import React from 'react'
-import Drawer from '@mui/material/Drawer'
+
 import Toolbar from '@mui/material/Toolbar'
-import List from '@mui/material/List'
-import Divider from '@mui/material/Divider'
-import ListItem from '@mui/material/ListItem'
-import ListItemButton from '@mui/material/ListItemButton'
-import ListItemIcon from '@mui/material/ListItemIcon'
-import ListItemText from '@mui/material/ListItemText'
-import InboxIcon from '@mui/icons-material/MoveToInbox'
-import MailIcon from '@mui/icons-material/Mail'
+import Typography from '@mui/material/Typography'
+
+import AppBar from '@mui/material/AppBar'
+import ChevronLeft from '@mui/icons-material/ChevronLeft';
+import ChevronRight from '@mui/icons-material/ChevronRight';
 
 const drawerWidth = 240;
 export default function Navbar() {
   return (
-    <Drawer
-        sx={{
-          width: drawerWidth,
-          '& .MuiDrawer-paper': {
-            width: drawerWidth,
-            boxSizing: 'border-box',
-          },
-        }}
-        variant="permanent"
-        anchor="left"
-      >
-        <Toolbar />
-        <Divider />
-        <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
+    <AppBar
+    position="fixed"
+    sx={{ backgroundColor:"white", width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}
+  >
+    <Toolbar sx={{justifyContent:"center"}}>
+      <ChevronLeft fontSize="large" sx={{color:"#7F03A5"}}/>
+      <Typography variant="h4" noWrap component="div" sx={{color:"#7F03A5"}}>
+        THIS MONTH
+      </Typography>
+      <ChevronRight fontSize="large" sx={{color:"#7F03A5"}}/>
+    </Toolbar>
+  </AppBar>
   )
 }
