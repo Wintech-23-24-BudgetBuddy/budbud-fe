@@ -7,34 +7,91 @@ import Button from '@mui/material/Button'
 import SendIcon from '@mui/icons-material/Send'
 import Message from './Message'
 
+const API_KEY = process.env.REACT_APP_OPEN_API_KEY;
 
-
-const messages = [
-  { id: 1, text: "Hi there!", sender: "bot" },
-  { id: 2, text: "Hello!", sender: "user" },
-  { id: 3, text: "How can I assist you today?", sender: "bot" },
-  { id: 4, text: "I need help with my budget", sender: "user" },
-  { id: 5, text: "What do you need help with?", sender: "bot" },
-  { id: 6, text: "I need help with my budget", sender: "user" },
-  { id: 7, text: "I need help with my budget", sender: "user" },
-  { id: 8, text: "What do you need help with?", sender: "bot" },
-  { id: 9, text: "I need help with my budget", sender: "user" }
-];
 
 
 export default function Chatbot() {
-  const [input, setInput] = React.useState("");
+  const systemMessage = [
+    {
+      id: 1,
+      role: "system",
+      content:
+      "You're like a grammar-checking wizard, helping users fix grammar bloopers and jazz up their sentence structures.",
+      }
+  ];
 
-  const handleSend = () => {
-    if (input.trim() !== "") {
-      console.log(input);
-      setInput("");
+  const initialMessage = [
+    {
+      id: 1,
+      role: "assistant",
+      content:
+        "Hi there! I'm your personal assistant. How can I help you today?",
+    },
+  ];
+  
+  const [input, setInput] = React.useState("");
+  const [isTyping, setIsTyping] = React.useState(false);
+  const [messages, setMessages] = React.useState(initialMessage);
+
+  const chatData = async (userMessage) => {
+    try {
+      const response = await fetch(
+        "https://api.openai.com/v1/chat/completions",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${API_KEY}`,
+          },
+          body: JSON.stringify({
+            model: "gpt-3.5-turbo",
+            messages: [systemMessage, ...messages, { role: "user", content: userMessage }],
+            temperature: 0.7,
+          }),
+        }
+      );
+  
+      if (!response.ok) {
+        throw new Error("Oops! Something went wrong while processing your request.");
+      }
+  
+      const responseData = await response.json();
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        {
+          role: "assistant",
+          content: responseData.choices[0].message.content,
+        },
+      ]);
+      setIsTyping(false);
+    } catch (error) {
+      console.error("Error while fetching chat data:", error);
+      setIsTyping(false);
     }
   };
 
+  const handleSubmit = () => {
+    if (input.trim() !== "") {
+      handleSendMessage(input);
+      setInput("");
+    }
+  }
+
+  const handleSendMessage = (messageContent) => {
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      { role: "user", content: messageContent },
+    ]);
+    chatData(messageContent);
+    setIsTyping(true);
+  };
+
   const handleInputChange = (event) => {
+    event.preventDefault();
     setInput(event.target.value);
   };
+  
   return (
 
 
@@ -43,6 +100,7 @@ export default function Chatbot() {
         {messages.map((message) => (
           <Message key={message.id} message={message} />
         ))}
+        {isTyping && <Message message={{ role: "assistant", content: "..." }} />}
       </Box>
       <Box sx={{ p: 2 }}>
         <Grid container spacing={2}>
@@ -61,7 +119,7 @@ export default function Chatbot() {
               color="primary"
               variant="contained"
               endIcon={<SendIcon />}
-              onClick={handleSend}
+              onClick={handleSubmit}
             >
               Send
             </Button>
