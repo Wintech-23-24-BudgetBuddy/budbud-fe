@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, Link } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import Toolbar from '@mui/material/Toolbar';
@@ -16,9 +16,11 @@ import Transactions from './pages/Transactions/Transactions';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Navbar from './components/Navbar';
 import Menu from './components/Menu';
+import { useLogout } from './hooks/useLogout';
 
 function App() {
   const { user, authIsReady } = useAuthContext();
+  const { logout } = useLogout();
 
   const renderProtectedRoute = (path, component) => {
     return user ? component : <Navigate to="/login" />;
@@ -30,6 +32,7 @@ function App() {
 
   const renderRoutes = () => {
     return (
+      <div>
       <Routes>
         <Route path="/" element={renderProtectedRoute('/', <Dashboard />)} />
         <Route path="/budget" element={renderProtectedRoute('/budget', <Budget />)} />
@@ -38,6 +41,8 @@ function App() {
         <Route path="/signup" element={renderLoginOrSignup('/signup', <Signup />)} />
         <Route path="/transactions" element={renderProtectedRoute('/transactions', <Transactions />)} />
       </Routes>
+       {user && <Link onClick={logout}>Logout</Link>}
+       </div>
     );
   };
 
