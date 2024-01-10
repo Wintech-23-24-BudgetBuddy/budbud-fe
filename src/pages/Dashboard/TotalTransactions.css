@@ -1,0 +1,11 @@
+.total-transactions-card {
+    background-color: #F59e9f;
+    border-radius: 5px;
+    margin-top: 30px;
+    padding: 10px;
+    transition: all 1s ease-in-out;
+}
+
+.total-transactions-card:hover {
+    transform: scale(0.95);
+}

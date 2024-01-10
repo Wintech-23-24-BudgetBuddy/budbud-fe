@@ -1,0 +1,11 @@
+.balance-card {
+    background-color: #Dec2e6;
+    border-radius: 5px;
+    margin-top: 30px;
+    padding: 10px;
+    transition: all 1s ease-in-out;
+}
+
+.balance-card:hover {
+    transform: scale(0.95);
+}

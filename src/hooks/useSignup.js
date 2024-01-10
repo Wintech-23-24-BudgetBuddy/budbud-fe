@@ -25,7 +25,9 @@ export const useSignup = () => {
                 await setDoc(docRef, {
                     userName: user.displayName,
                     uid: user.uid,
-                    email: user.email
+                    email: user.email,
+                    balance: 0,
+                    transactions: []
                 })
                 if (!isCancelled) {
                     setIsPending(false)
