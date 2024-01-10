@@ -17,7 +17,7 @@ export const useSignup = () => {
             .then( async (userCredential) => {
                 const user = userCredential.user;
                 await updateProfile(user, { displayName })
-                    .then((userCredential) => {
+                    .then((user) => {
                         dispatch({type: 'LOGIN', payload: user})
                     })
                 const db = getFirestore()

@@ -1,6 +1,8 @@
+import React from 'react'
 import { createContext, useReducer, useEffect } from 'react'
 import { projectAuth } from '../firebase/config'
 import { onAuthStateChanged } from 'firebase/auth'
+import PropTypes from 'prop-types';
 
 export const AuthContext = createContext()
 
@@ -32,6 +34,10 @@ export const AuthContextProvider = ({ children }) => {
   }, [])
 
   console.log('AuthContext state:', state)
+
+  AuthContextProvider.propTypes = {
+    children: PropTypes.node.isRequired,
+  };
   
   return (
     <AuthContext.Provider value={{ ...state, dispatch }}>
