@@ -17,6 +17,8 @@ import Dashboard from './pages/Dashboard/Dashboard';
 import Navbar from './components/Navbar';
 import Menu from './components/Menu';
 
+import Transactionlist from './components/Transactionlist';
+
 function App() {
   const { user, authIsReady } = useAuthContext();
 
